@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,9 +7,9 @@
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: #001100;
-      color: #00ff00;
+      font-family: "Courier New", Courier, monospace;
+      background: radial-gradient(circle, #000000, #002b36);
+      color: #00ffcc;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -19,37 +18,63 @@
     }
     .container {
       text-align: center;
+      border: 3px solid #00ffcc;
+      padding: 20px;
+      background: rgba(0, 20, 30, 0.95);
+      border-radius: 15px;
+      box-shadow: 0 0 40px #00ffcc, 0 0 60px #00ccff inset;
     }
     canvas {
       display: block;
-      margin: 0 auto;
-      background: rgba(0, 50, 0, 0.8);
-      border: 2px solid #00ff00;
+      margin: 20px auto;
+      background: linear-gradient(145deg, #002833, #004d59);
+      border: 3px solid #00ffcc;
+      box-shadow: 0 0 20px #00ffcc, 0 0 40px #00ccff;
     }
     .score {
-      font-size: 24px;
-      margin: 10px 0;
+      font-size: 38px;
+      font-weight: bold;
+      margin: 15px 0;
+      color: #00ccff;
+      text-shadow: 0 0 20px #00ffcc, 0 0 40px #00ccff;
+    }
+    .message {
+      font-size: 22px;
+      margin-bottom: 20px;
+      color: #00ccff;
+      text-shadow: 0 0 15px #00ffcc, 0 0 35px #00aaff;
     }
     .controls {
-      margin-top: 20px;
+      margin-top: 25px;
+    }
+    .controls div {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
     }
     button {
-      width: 50px;
-      height: 50px;
-      margin: 5px;
-      background: #00ff00;
-      color: #001100;
+      width: 65px;
+      height: 65px;
+      background: linear-gradient(145deg, #004f59, #00e6e6);
+      color: #001f26;
       border: none;
-      font-size: 20px;
+      font-size: 22px;
       cursor: pointer;
-      border-radius: 5px;
+      border-radius: 50%;
+      box-shadow: 0 0 15px #00e6e6, 0 0 30px #00ccff;
+      font-weight: bold;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 25px #00ccff, 0 0 50px #00aaff;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="score">0</div>
-    <div class="message">Score 10 to get ROKO</div>
+    <div class="message">Score 10 to get FRX</div>
     <canvas id="game" width="300" height="300"></canvas>
     <div class="controls">
       <button onclick="changeDirection('up')">↑</button>
@@ -60,6 +85,71 @@
       </div>
     </div>
   </div>
-  <script src="script.js"></script>
+  <script>
+    const canvas = document.getElementById("game");
+    const ctx = canvas.getContext("2d");
+    const scoreElement = document.querySelector(".score");
+    const messageElement = document.querySelector(".message");
+
+    let player = { x: 140, y: 140 };
+    let food = spawnFood();
+    let direction = null;
+    let score = 0;
+
+    function gameLoop() {
+      update();
+      draw();
+      setTimeout(gameLoop, 100);
+    }
+
+    function update() {
+      if (direction) {
+        if (direction === "up") player.y -= 10;
+        if (direction === "down") player.y += 10;
+        if (direction === "left") player.x -= 10;
+        if (direction === "right") player.x += 10;
+      }
+
+      if (player.x === food.x && player.y === food.y) {
+        score++;
+        scoreElement.textContent = score;
+        food = spawnFood();
+      }
+
+      if (player.x < 0) player.x = canvas.width - 10;
+      if (player.x >= canvas.width) player.x = 0;
+      if (player.y < 0) player.y = canvas.height - 10;
+      if (player.y >= canvas.height) player.y = 0;
+
+      if (score >= 10) {
+        messageElement.textContent = "You got FRX!";
+      }
+    }
+
+    function draw() {
+      ctx.fillStyle = "#002b36";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = "#00ccff";
+      ctx.fillRect(player.x, player.y, 10, 10);
+
+      ctx.fillStyle = "#00ffcc";
+      ctx.beginPath();
+      ctx.arc(food.x + 5, food.y + 5, 5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    function spawnFood() {
+      const x = Math.floor(Math.random() * 30) * 10;
+      const y = Math.floor(Math.random() * 30) * 10;
+      return { x, y };
+    }
+
+    function changeDirection(newDirection) {
+      direction = newDirection;
+    }
+
+    gameLoop();
+  </script>
 </body>
 </html>
