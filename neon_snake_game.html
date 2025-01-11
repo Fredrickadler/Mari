@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neon Snake Game</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #001100;
+      color: #00ff00;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .container {
+      text-align: center;
+    }
+    canvas {
+      display: block;
+      margin: 0 auto;
+      background: rgba(0, 50, 0, 0.8);
+      border: 2px solid #00ff00;
+    }
+    .score {
+      font-size: 24px;
+      margin: 10px 0;
+    }
+    .controls {
+      margin-top: 20px;
+    }
+    button {
+      width: 50px;
+      height: 50px;
+      margin: 5px;
+      background: #00ff00;
+      color: #001100;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="score">0</div>
+    <div class="message">Score 10 to get ROKO</div>
+    <canvas id="game" width="300" height="300"></canvas>
+    <div class="controls">
+      <button onclick="changeDirection('up')">↑</button>
+      <div>
+        <button onclick="changeDirection('left')">←</button>
+        <button onclick="changeDirection('down')">↓</button>
+        <button onclick="changeDirection('right')">→</button>
+      </div>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
